@@ -1,16 +1,29 @@
 import express from "express";
 import { login } from "./auth.ts";
-
+import cors from "cors";
 const app = express();
 app.use(express.json());
-
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 app.post("/login", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body || {}; // 👈 fix
+
+    if (!email || !password) {
+      return res.status(400).json({
+        error: "email və password lazımdır",
+      });
+    }
+
     const result = await login(email, password);
     res.json(result);
-  } catch (e) {
-    res.status(401).json({ error: "Login failed" });
+  } catch (e: any) {
+    console.error(e);
+    res.status(401).json({ error: e.message });
   }
 });
 
