@@ -1,7 +1,9 @@
 import express from "express";
-import { login } from "./auth.ts";
+
 import cors from "cors";
-import { getCredits } from "./credit.ts";
+import { login } from "./auth.js";
+import { getCredits } from "./credit.js";
+
 const app = express();
 app.use(express.json());
 app.use(
