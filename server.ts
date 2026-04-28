@@ -1,5 +1,5 @@
+import "dotenv/config";
 import express from "express";
-
 import cors from "cors";
 import { login } from "./auth.js";
 import { getCredits } from "./credit.js";
