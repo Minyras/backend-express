@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { Pool } from "pg";
 import { PrismaClient } from "./generated/prisma/client.js";
 
-let prisma: PrismaClient | null = null;
+let prisma: InstanceType<typeof PrismaClient> | null = null;
 
 function getPrismaClient() {
   if (!process.env.DATABASE_URL) {
@@ -16,6 +16,7 @@ function getPrismaClient() {
     const pool = new Pool({
       connectionString: process.env.DATABASE_URL,
     });
+
     const adapter = new PrismaPg(pool);
     prisma = new PrismaClient({ adapter });
   }
@@ -38,9 +39,13 @@ export async function login(email: string, password: string) {
     throw new Error("Wrong password");
   }
 
-  const token = jwt.sign({ userId: user.id }, "SECRET_KEY", {
-    expiresIn: "1d",
-  });
+  const token = jwt.sign(
+    { userId: user.id },
+    process.env.JWT_SECRET || "SECRET_KEY",
+    {
+      expiresIn: "1d",
+    },
+  );
 
   return { token };
 }
