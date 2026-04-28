@@ -7,10 +7,8 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "allowImportingTsExtensions": false,
-    "target": "ES2020",
     "esModuleInterop": true,
     // "types": [],
     // For nodejs:
