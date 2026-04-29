@@ -5,9 +5,9 @@ import jwt from "jsonwebtoken";
 import { Pool } from "pg";
 import { PrismaClient } from "./generated/prisma/client.js";
 
-let prisma: InstanceType<typeof PrismaClient> | null = null;
+let prisma: PrismaClient | null = null;
 
-function getPrismaClient() {
+function getPrismaClient(): PrismaClient {
   if (!process.env.DATABASE_URL) {
     throw new Error("DATABASE_URL is not set");
   }
@@ -33,7 +33,7 @@ export async function login(email: string, password: string) {
     throw new Error("User not found");
   }
 
-  const isMatch = await bcrypt.compare(password, user.password);
+  const isMatch = await bcrypt.compare(password, String(user.password));
 
   if (!isMatch) {
     throw new Error("Wrong password");
